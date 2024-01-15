@@ -34,7 +34,10 @@ router.post(
         email: req.body.email,
       });
       res.json({ user });
-    } catch (error) {}
+    } catch (error) {
+      console.error(error.message);
+      res.status(500).json({"Server Error"})
+    }
 
     //   .then(user => res.json(user))
     //   .catch(err=> {console.log(err)
