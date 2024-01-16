@@ -4,10 +4,10 @@ const router = express.Router();
 const { body, validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const fetchuser = require('../middleware/fetchuser');
+const JWT_SECRET = "hellothisi$atharv";
 
-const JWT_SECRET = "hellothisisatharv";
-
-// Create a User using: POST "/api/auth/createuser". Doesn't require Auth
+// ROUTE_1 : Create a User using: POST "/api/auth/createuser". Doesn't require Auth
 router.post(
   "/createuser",
   [
@@ -59,7 +59,7 @@ router.post(
     // res.json({error: 'Please enter a unique value for email', message: err.message})})
   }
 );
-// Create a User using: POST "/api/auth/login". Doesn't require Auth
+// ROUTE_2 :  Create a User using: POST "/api/auth/login". Doesn't require Auth
 router.post(
   "/login",
   [
@@ -94,11 +94,24 @@ router.post(
         },
       };
       const authtoken = jwt.sign(data, JWT_SECRET);
-      res.json(authtoken);
+      res.json({authtoken});
     } catch (error) {
       console.log(error.message);
       res.status(500).send("Error in Sending response");
     }
   }
 );
+// ROUTE_2 : Get details of user who is logged in using: POST "/api/auth/getuser". Require Authentication(user needs to login)
+router.post(
+  "/getuser",fetchuser,
+  async (req, res) => {
+    try {
+      userId = req.user.id ;
+      const user = await User.findById(userId).select("-password");
+      res.send(user)
+    } catch (error) {
+      console.error(error.message);
+      res.status(500).send("Error in Sending response");
+    }
+  });
 module.exports = router;
