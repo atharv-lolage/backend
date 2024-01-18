@@ -50,8 +50,8 @@ router.post(
       // console.log(jwtData);
       res.json({ authtoken });
     } catch (error) {
-      console.error(error.message);
-      res.status(500).send("Error in Sending response");
+      console.log(error.message);
+      res.status(500).send("Internal server error");
     }
 
     //   .then(user => res.json(user))
@@ -97,7 +97,7 @@ router.post(
       res.json({ authtoken });
     } catch (error) {
       console.log(error.message);
-      res.status(500).send("Error in Sending response");
+      res.status(500).send("Internal server error");
     }
   }
 );
